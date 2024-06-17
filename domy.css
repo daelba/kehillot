@@ -38,7 +38,9 @@ input {
 	font-family: SourceSerif;
 	font-size: 95%;
 }
-
+.flag{
+	height: 15px;
+}
 .aktiv {
 	height: 25px;
 	line-height: 25px;

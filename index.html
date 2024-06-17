@@ -1,36 +1,54 @@
 <!DOCTYPE html5>
 <html>
-	<head>
-		<meta charset="utf-8" />
-    		<title>Kehillot | קהילות</title>
-    		
-		<script src="js/matomo.js"></script>
-    	   	<link href="domy.css" rel="stylesheet" type="text/css" />
-    	</head>
-    	<body>
-		<div class="header">
-			<h1>Mapy židovského osídlení 1857–1930</h1>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Kehillot | קהילות</title>
+
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<!--	<script src="js/matomo.js"></script> -->
+	<script src="translations.js"></script>
+	<link href="domy.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div class="header">
+		<div style="width: 100px"></div>
+		<div>
+			<h1 id="index_header"></h1>
 		</div>
-		<div class="table-wrap" style="font-size: 120%">
-			<div style="width:60%">
-		    		<div class="tab-popis" style="margin:0px">
-			    		<h1>O projektu</h1>
-					<p>Mapy prezentují údaje o židovském osídlení ve vybraných městech v letech 1857–1930. Data byla shromážděna v rámci řešení různých projektů. Zejména se jednalo o postdoktorský projekt řešený na <a href="https://www.hiu.cas.cz/">Historickém ústavu Akademie věd ČR</a> a zaměřený na zkoumání dynamiky židovského osídlení ve městech, v nichž se před rokem 1848 nacházelo židovské ghetto (Boskovice, Hranice, Kolín, Loštice). Výstupem tohoto projektu se stala kniha <a href="https://www.hiu.cas.cz/knihy/monografie/prekracovani-hranic-ghetta-promena-zidovskych-sidelnich-struktur-a-akulturacni-strategie-zidu"><i>Překračování hranic ghetta</i></a> (Historický ústav, 2023), která obsahuje také metodologii tvorby těchto map židovského osídlení. Základ online mapové aplikace byl vytvořen v rámci přípravy výstavy <a href="https://synagoga-zatec.cz">v&nbsp;rekonstruované synagoze v Žatci</a>.</p>
-		    		</div>
-		    		<div class="tab-popis">
-			    		<h1>Zpracované lokality</h1>
-					<p style="text-align:center">
-						<a href="domy.html?loc=Boskovice">Boskovice</a> | <a href="domy.html?loc=Hranice">Hranice</a> | <a href="domy.html?loc=Kolín">Kolín</a> | <a href="domy.html?loc=Loštice">Loštice</a> | <a href="domy.html?loc=Příbor">Příbor</a> | <a href="domy.html?loc=Žatec">Žatec</a>
-					</p>
-		    		</div>
-		    		<div class="tab-popis" style="text-align:center">
-			    		<h1>Kontakt</h1>
-					<p>Mgr. Daniel Baránek, Ph.D.<br/>daniel.baranek [a] gmail.com</p>
-					<img src="vendor/Mastodon.svg" width="12px" /> Mastodon: <a href="https://witter.cz/@danielbaranek">cs</a> | <a href="https://sciences.social/@daelba">en</a>
-		    		</div>
-		    	</div>
-	    	</div>
-	</body>
+		<div style="width: 100px">
+			<img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg"
+				alt="cs" />
+			<img class="flag"
+				src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg"
+				alt="en" />
+			<img class="flag" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg"
+				alt="de" />
+		</div>
+	</div>
+	<div class="table-wrap" style="font-size: 120%">
+		<div style="width:60%">
+			<div class="tab-popis" style="margin:0px">
+				<h1 id="about_h1"></h1>
+				<p id="about_txt"></p>
+			</div>
+			<div class="tab-popis">
+				<h1 id="locs_h1"></h1>
+				<p id="locs_txt" style="text-align:center">
+					<a href="domy.html?loc=Boskovice">Boskovice</a> | <a href="domy.html?loc=Hranice">Hranice</a> | <a
+						href="domy.html?loc=Kolín">Kolín</a> | <a href="domy.html?loc=Loštice">Loštice</a> | <a
+						href="domy.html?loc=Příbor">Příbor</a> | <a href="domy.html?loc=Žatec">Žatec</a>
+				</p>
+			</div>
+			<div class="tab-popis" style="text-align:center">
+				<h1 id="contact_h1"></h1>
+				<p>Mgr. Daniel Baránek, Ph.D.<br />baranek [a] hiu.cas.cz</p>
+				<img src="vendor/Mastodon.svg" width="12px" /> Mastodon: <a
+					href="https://witter.cz/@danielbaranek">cs</a> | <a href="https://sciences.social/@daelba">en</a>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>
-
-
