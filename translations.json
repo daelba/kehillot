@@ -50,6 +50,16 @@
         "en": "Contact",
         "de": "Kontakt"
     },
+    "link_hiu_db": {
+        "cs": "<a href='https://www.hiu.cas.cz/seznam-pracovniku/94'>Mgr. Daniel Baránek, Ph.D.</a>",
+        "en": "<a href='https://www.hiu.cas.cz/en/employees/94>Mgr. Daniel Baránek, Ph.D.</a>",
+        "de": "<a href='https://www.hiu.cas.cz/en/employees/94>Mgr. Daniel Baránek, Ph.D.</a>"
+    },
+    "link_hiu_inst": {
+        "cs": "https://www.hiu.cas.cz",
+        "en": "https://www.hiu.cas.cz/en",
+        "de": "https://www.hiu.cas.cz/en"
+    },
     "loc_selection": {
         "cs": "výběr<br/>lokality",
         "en": "location</br>selection",
