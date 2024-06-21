@@ -1,0 +1,58 @@
+{
+    "link_hiu_db": {
+        "cs": {
+            "href": "https://www.hiu.cas.cz/seznam-pracovniku/94",
+            "text": "Mgr. Daniel Baránek, Ph.D."
+        },
+        "en": {
+            "href": "https://www.hiu.cas.cz/en/employees/94",
+            "text": "Mgr. Daniel Baránek, Ph.D."
+        },
+        "de": {
+            "href": "href='https://www.hiu.cas.cz/en/employees/94",
+            "text": "Mgr. Daniel Baránek, Ph.D."
+        }
+    },
+    "link_hiu_inst": {
+        "cs": {
+            "href": "https://www.hiu.cas.cz",
+            "text": "Historický ústav<br />AV ČR, v. v. i."
+        },
+        "en": {
+            "href": "https://www.hiu.cas.cz/en",
+            "text": "Institute of History of the Czech Academy of Sciences"
+        },
+        "de": {
+            "href": "https://www.hiu.cas.cz/en",
+            "text": "Historisches Institut der Akademie der Wissenschaften der Tschechischen Republik"
+        }
+    },
+    "link_mastodon": {
+        "cs": {
+            "href": "https://witter.cz/@danielbaranek",
+            "text": "Mastodon"
+        },
+        "en": {
+            "href": "https://sciences.social/@daelba",
+            "text": "Mastodon"
+        },
+        "de": {
+            "href": "https://sciences.social/@daelba",
+            "text": "Mastodon"
+        }
+    },
+    "link_cc": {
+        "cs": {
+            "href": "https://creativecommons.org/licenses/by-sa/4.0/deed.cs",
+            "text": "Licence: CC BY-SA 4.0"
+        },
+        "en": {
+            "href": "https://creativecommons.org/licenses/by-sa/4.0/deed.en",
+            "text": "License: CC BY-SA 4.0"
+        },
+        "de": {
+            "href": "https://creativecommons.org/licenses/by-sa/4.0/deed.de",
+            "text": "Lizenz: CC BY-SA 4.0"
+        }
+    }
+}

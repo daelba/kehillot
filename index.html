@@ -8,54 +8,75 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<!--	<script src="js/matomo.js"></script> -->
 	<script src="translations.js"></script>
-	<link href="domy.css" rel="stylesheet" type="text/css" />
+	<link href="styles.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-	<div class="header">
+	<div class="head_foot">
 		<div style="width: 100px"></div>
 		<div>
 			<h1 id="index_header"></h1>
 		</div>
 		<div style="width: 100px">
-			<img class="flag" src="vendor/flags/cs.svg"
-				alt="cs" />
-			<img class="flag"
-				src="vendor/flags/en.svg"
-				alt="en" />
-			<img class="flag" src="vendor/flags/de.svg"
-				alt="de" />
+			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
+			<img class="flag" src="vendor/flags/en.svg" alt="en" />
+			<img class="flag" src="vendor/flags/de.svg" alt="de" />
 		</div>
 	</div>
 	<div class="table-wrap" style="font-size: 120%">
-		<div style="width:60%">
+		<div style="width:20%">
 			<div class="tab-popis" style="margin:0px">
 				<h1 id="about_h1"></h1>
 				<p id="about_txt"></p>
 			</div>
 			<div class="tab-popis">
 				<h1 id="locs_h1"></h1>
-				<p id="locs_txt" style="text-align:center">
-					<a href="domy.html?loc=Boskovice">Boskovice</a> | <a href="domy.html?loc=Hranice">Hranice</a> | <a
-						href="domy.html?loc=Kolín">Kolín</a> | <a href="domy.html?loc=Loštice">Loštice</a> | <a
-						href="domy.html?loc=Příbor">Příbor</a> | <a href="domy.html?loc=Žatec">Žatec</a>
-				</p>
-			</div>
-			<div class="tab-popis" style="text-align:center">
-				<h1 id="contact_h1"></h1>
-				<p><span id="link_hiu_db"></span><br />baranek [a] hiu.cas.cz</p>
-				<img src="vendor/logos/mastodon.svg" width="12px" /> Mastodon: <a
-					href="https://witter.cz/@danielbaranek">cs</a> | <a href="https://sciences.social/@daelba">en</a>
+				<p id="locs"style="text-align:center"></p>
 			</div>
 		</div>
 	</div>
-	<div class="header">
-		<div style="width: 100px"></div>
-<div></div>
-		<div style="width: 200px">
-<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" alt="License: CC BY-SA 4.0" title="License: CC BY-SA 4.0"><img src="vendor/logos/cc-by-sa.svg" class="logo" /></a>
-<a href="https://github.com/daelba/kehillot" alt="GitHub repository" title="GitHub repository"><img src="vendor/logos/github-mark-white.svg" class="logo" /></a>
-</div>
+	<div class="head_foot">
+		<div style="width: 300px">
+			<a id="link_hiu_inst" target="_blank">
+				<div style="display:flex; text-align:left; justify-content:left; padding-left:20px">
+					<img src="vendor/logos/hiu.svg" class="logo" />
+					<span id="link_hiu_inst" style="padding-left:5px"></span>
+				</div>
+			</a>
+		</div>
+		<div>
+			<div>
+				<p>
+					<a id="link_hiu_db" target="_blank"><span id="link_hiu_db"></span></a><br />
+					<span>
+						<a href="mailto:baranek@hiu.cas.cz" title="e-mail">
+							<img src="vendor/images/email.svg" class="icon" />
+						</a>
+						<a href="https://scholia.toolforge.org/author/Q61685639" title="Wikidata/Scholia"
+							target="_blank">
+							<img src="vendor/logos/wikidata.svg" class="icon" />
+						</a>
+						<a id="link_mastodon" target="_blank">
+							<img src="vendor/logos/mastodon.svg" class="icon" />
+						</a>
+					</span>
+				</p>
+			</div>
+		</div>
+		<div style="width: 300px">
+			<a id="link_cc" target="_blank">
+				<div style="display:flex; justify-content:right; padding-right:20px"><img
+						src="vendor/logos/cc-by-sa.svg" class="logo" />
+					<div>
+			</a>
+			<a href="https://github.com/daelba/kehillot" target="_blank" alt="GitHub repository"
+				title="GitHub repository">
+				<div style="display:flex; text-align:left; padding-right:20px">
+					<img src="vendor/logos/github-mark-white.svg" class="logo" />
+					<span style="padding-left:5px"><span id="verze"></span><br />1.0.0</span>
+				</div>
+			</a>
+		</div>
 	</div>
 </body>
 

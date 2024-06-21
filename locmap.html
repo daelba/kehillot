@@ -15,13 +15,13 @@
 	<script src="https://unpkg.com/osmtogeojson@2.2.12/osmtogeojson.js"></script>
 
 	<script src="translations.js"></script>
-	<link href="domy.css" rel="stylesheet" type="text/css" />
+	<link href="styles.css" rel="stylesheet" type="text/css" />
 
 
 </head>
 
 <body>
-	<div class="header">
+	<div class="head_foot">
 		<div style="width: 100px">
 			<p style="text-align:center"><a href="index.html">⬅<br /><span id="loc_selection"></span></a></p>
 		</div>
@@ -29,13 +29,9 @@
 			<h1 id="loc"></h1>
 		</div>
 		<div style="width: 100px">
-			<img class="flag" src="vendor/flags/cs.svg"
-				alt="cs" />
-			<img class="flag"
-				src="vendor/flags/en.svg"
-				alt="en" />
-			<img class="flag" src="vendor/flags/de.svg"
-				alt="de" />
+			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
+			<img class="flag" src="vendor/flags/en.svg" alt="en" />
+			<img class="flag" src="vendor/flags/de.svg" alt="de" />
 		</div>
 	</div>
 
@@ -64,19 +60,23 @@
 					src="vendor/images/loading.gif" width="40px" /></div>
 		</div>
 	</div>
-		<div class="header">
+	<div class="head_foot">
 		<div style="width: 100px"></div>
-<div></div>
+		<div></div>
 		<div style="width: 300px">
-<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" alt="License: CC BY-SA 4.0" title="License: CC BY-SA 4.0"><img src="vendor/logos/cc-by-sa.svg" class="logo" /></a>
-<a href="https://github.com/daelba/kehillot" alt="GitHub repository" title="GitHub repository"><img src="vendor/logos/github-mark-white.svg" class="logo" /></a>
-<a href="https://www.wikidata.org" title="Powered by Wikidata"><img src="vendor/logos/powered-wikidata.svg" class="logo" /></a>
-<a href="https://www.openhistoricalmap.org" alt="OpenHistoricalMap" title=OpenHistoricalMap"><img src="vendor/logos/ohm.svg" class="logo" /></a>
-</div>
+			<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" alt="License: CC BY-SA 4.0"
+				title="License: CC BY-SA 4.0"><img src="vendor/logos/cc-by-sa.svg" class="logo" /></a>
+			<a href="https://github.com/daelba/kehillot" alt="GitHub repository" title="GitHub repository"><img
+					src="vendor/logos/github-mark-white.svg" class="logo" /></a>
+			<a href="https://www.wikidata.org" title="Powered by Wikidata"><img src="vendor/logos/powered-wikidata.svg"
+					class="logo" /></a>
+			<a href="https://www.openhistoricalmap.org" alt="OpenHistoricalMap" title=OpenHistoricalMap"><img
+					src="vendor/logos/ohm.svg" class="logo" /></a>
+		</div>
 	</div>
 	<script>
-		var locURI = location.search;
-		var loc = locURI.replace("?loc=", "");
+		var urlParams = new URLSearchParams(location.search);
+		var loc = urlParams.get('loc')
 		var locURL = "lokal/" + loc + ".js";
 
 		$.getScript(locURL, function () {

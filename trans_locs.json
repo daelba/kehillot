@@ -1,0 +1,38 @@
+[
+    {
+        "link": "boskovice",
+        "cs": "Boskovice",
+        "en": "Boskovice",
+        "de": "Boskovice (Boskowitz)"
+    },
+    {
+        "link": "hranice",
+        "cs": "Hranice",
+        "en": "Hranice",
+        "de": "Hranice (Mähr. Weisskirchen)"
+    },
+    {
+        "link": "kolin",
+        "cs": "Kolín",
+        "en": "Kolín",
+        "de": "Kolín"
+    },
+    {
+        "link": "lostice",
+        "cs": "Loštice",
+        "en": "Loštice",
+        "de": "Loštice (Loschitz)"
+    },
+    {
+        "link": "pribor",
+        "cs": "Příbor",
+        "en": "Příbor",
+        "de": "Příbor (Freiberg)"
+    },
+    {
+        "link": "zatec",
+        "cs": "Žatec",
+        "en": "Žatec",
+        "de": "Žatec (Saaz)"
+    }
+]

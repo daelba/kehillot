@@ -1,21 +1,52 @@
+/* colors
+darkblue:	hsl(228,30%,17%);
+lightblue:	hsl(222,71%,48%);
+brown:		hsl(39,43%,56%);
+grey:		hsl(36,16%,94%);
+white:		hsl(0,0%,100%);
+*/
+
 @font-face {
   font-family: SourceSerif;
   src: url(vendor/SourceSerifPro-Regular.ttf);
 }
 
+/* general regions */ 
+
 body {
 	margin: 0;
 	padding: 0;
-/*	background-color: hsl(197,100%,25%); */
-	background-color: hsl(197,100%,25%);
+	background-color: hsl(228,30%,17%);
+	color: hsl(0,0%,100%);
 	font-size: 95%;
 	font-family: SourceSerif;
-	color: hsl(197,100%,98%);
 }
+
+.head_foot {
+	display: table;
+	background-color: hsl(228,30%,17%);
+	width: 100%;
+	min-height: 90px;
+	text-align:center;
+	color: hsl(0,0%,100%);
+}
+
+.head_foot > * {
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.head_foot a {
+	color: #ffffff;
+}
+
+
+/* general texts */
 
 a {
 	text-decoration: none;
-	color: hsl(197,100%,44%);
+/*	color: hsl(197,100%,44%); */
+	color: hsl(39,43%,40%);
 }
 
 h1 {
@@ -38,13 +69,22 @@ input {
 	font-family: SourceSerif;
 	font-size: 95%;
 }
+
+/* images */
 .flag{
 	height: 15px;
 }
 .logo {
 	height: 30px;
-	padding: 3px
+	padding: 5px
 }
+.icon {
+	height: 15px;
+	padding: 2px
+}
+
+/* map elements */
+
 .aktiv {
 	height: 25px;
 	line-height: 25px;
@@ -83,25 +123,12 @@ input {
 	color: hsl(197,100%,25%);
 }
 
-.header {
-	display: table;
-	width: 100%;
-	min-height: 60px;
-	text-align:center
-}
 
-.header > * {
-	display: table-cell;
-	vertical-align: middle
-}
-.header a {
-	color: hsl(197,100%,90%);
-}
 
 .table-wrap {
 	display: table;
 	width: 100%;
-	height: 87%;
+/*	height: 70%; */
 	border-spacing: 10px;
 /* 	background-color: #FE9F6D; */
 	background-color: hsl(197,35%,90%);
@@ -130,7 +157,7 @@ input {
 }
 
 #map {
-	width: 75%;
+	width: 78%;
 	height: 100%;
 	font-family: SourceSerif;
 }
