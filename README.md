@@ -1,2 +1,2 @@
 # kehillot
-Database and map application of the Jewish settlement of the Czech lands
+Database and map application of the Jewish settlement of the Bohemian lands

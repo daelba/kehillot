@@ -1,4 +1,18 @@
 {
+    "link_index": {
+        "cs": {
+            "href": "index.html?lang=cs",
+            "text": "výběr<br/>lokality"
+        },
+        "en": {
+            "href": "index.html?lang=en",
+            "text": "location</br>selection"
+        },
+        "de": {
+            "href": "index.html?lang=de",
+            "text": "Standortauswahl"
+        }
+    },
     "link_hiu_db": {
         "cs": {
             "href": "https://www.hiu.cas.cz/seznam-pracovniku/94",
@@ -9,7 +23,7 @@
             "text": "Mgr. Daniel Baránek, Ph.D."
         },
         "de": {
-            "href": "href='https://www.hiu.cas.cz/en/employees/94",
+            "href": "https://www.hiu.cas.cz/en/employees/94",
             "text": "Mgr. Daniel Baránek, Ph.D."
         }
     },
@@ -20,11 +34,11 @@
         },
         "en": {
             "href": "https://www.hiu.cas.cz/en",
-            "text": "Institute of History of the Czech Academy of Sciences"
+            "text": "Institute of History<br />of the Czech Academy of Sciences"
         },
         "de": {
             "href": "https://www.hiu.cas.cz/en",
-            "text": "Historisches Institut der Akademie der Wissenschaften der Tschechischen Republik"
+            "text": "Historisches Institut der Akademie<br />der Wissenschaften der Tschechischen Republik"
         }
     },
     "link_mastodon": {

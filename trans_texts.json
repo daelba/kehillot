@@ -50,11 +50,6 @@
         "en": "Version",
         "de": "Version"
     },
-    "loc_selection": {
-        "cs": "výběr<br/>lokality",
-        "en": "location</br>selection",
-        "de": "Standortauswahl"
-    },
     "loc_box1_head": {
         "cs": "Rok sčítání lidu",
         "en": "Census year",
@@ -70,49 +65,59 @@
         "en": "found in census records",
         "de": "gefunden in den Volkszählungsoperaten"
     },
-    "loc_box1_map": {
+    "view_map": {
         "cs": "Mapa",
         "en": "Map",
         "de": "Karte"
     },
-    "loc_box1_pers": {
+    "view_pers": {
         "cs": "Osoby",
         "en": "Persons",
         "de": "Personen"
     },
-    "loc_box1_search_pers": {
+    "view_search_pers": {
         "cs": "Hledat osoby",
         "en": "Search persons",
-        "de": "Suche nach Personen"
+        "de": "Person suchen"
     },
-    "loc_box1_search_house": {
+    "view_search_house": {
         "cs": "Hledat čp.",
         "en": "Search houses",
-        "de": "Suche nach Hausnummern"
+        "de": "Haus suchen"
     },
     "loc_box2_head": {
-        "cs": "Detaily k vybrané osobě",
-        "en": "Details about the selected person",
-        "de": "Informationen zur ausgewählten Person"
-    },
-    "loc_box2_select": {
-        "cs": "Vyberte v mapě objekt a osobu",
-        "en": "Select an object and person on the map",
-        "de": "Wählen Sie im Kartenbereich Objekt und Person aus"
-    },
-    "loc_box3_head": {
         "cs": "Zdroje",
         "en": "Sources",
         "de": "Quellen"
     },
-    "loc_box3_pers": {
+    "loc_box2_pers": {
         "cs": "Osobní data",
-        "en": "Personal Data",
+        "en": "Personal data",
         "de": "Persönliche Daten"
     },
-    "loc_box3_map": {
+    "loc_box2_map": {
         "cs": "Mapové podklady",
         "en": "Map",
         "de": "Kartengrundlagen"
+    },
+    "loc_box3_head": {
+        "cs": "Detaily k vybrané osobě",
+        "en": "Selected person details",
+        "de": "Angaben zur ausgewählten Person"
+    },
+    "loc_box3_select": {
+        "cs": "Vyberte v mapě objekt a osobu.",
+        "en": "Select an object and person on the map.",
+        "de": "Wählen Sie im Kartenbereich Objekt und Person aus."
+    },
+    "loc_view_pers_head": {
+        "cs": "Osoby židovského vyznání bydlící v lokalitě roku",
+        "en": "Persons of Jewish religion living in the locality in",
+        "de": "In der Ortschaft lebende Personen jüdischen Glaubens im Jahr"
+    },
+    "without_data": {
+        "cs": "Sčítací operáty z vybraného roku se nedochovaly.",
+        "en": "Census records from the selected year have not been preserved.",
+        "de": "Die Volkszählungsoperaten aus dem ausgewählten Jahr sind nicht erhalten geblieben."
     }
 }

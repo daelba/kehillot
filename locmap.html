@@ -5,6 +5,7 @@
 	<meta charset="utf-8" />
 	<title>Kehillot | קהילות</title>
 
+	<!-- vendor -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -14,77 +15,107 @@
 		crossorigin=""></script>
 	<script src="https://unpkg.com/osmtogeojson@2.2.12/osmtogeojson.js"></script>
 
-	<script src="translations.js"></script>
+	<!-- local -->
 	<link href="styles.css" rel="stylesheet" type="text/css" />
-
-
+	<script src="locmap.js"></script>
 </head>
 
 <body>
 	<div class="head_foot">
-		<div style="width: 100px">
-			<p style="text-align:center"><a href="index.html">⬅<br /><span id="loc_selection"></span></a></p>
+		<div class="head_foot_block" style="width: 100px; padding-left: 20px; justify-content:left">
+			<p style="text-align:center"><a id="link_index">⬅<br /><span id="link_index"></span></a></p>
 		</div>
-		<div>
-			<h1 id="loc"></h1>
+		<div class="head_foot_block" style="justify-content:center">
+			<h1 id="loc_name"></h1>
 		</div>
-		<div style="width: 100px">
+		<div class="head_foot_block" style="width: 100px; padding-right:20px; justify-content:right">
 			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
 			<img class="flag" src="vendor/flags/en.svg" alt="en" />
 			<img class="flag" src="vendor/flags/de.svg" alt="de" />
 		</div>
 	</div>
-
-	<div class="table-wrap">
-		<div>
-			<div class="tab-popis" style="margin:0px">
+	<div class="content-wrap" style="flex-grow:1;flex-direction:row">
+		<div style="width:300px; padding:5px 0px 5px 5px; display:flex; flex-shrink:0; flex-direction:column">
+			<div class="tab-popis">
 				<h2 id="loc_box1_head"></h2>
-				<div align="center">
-					<div id="osa" class="vyber" align="center"></div>
-					<div id="infosa"></div>
-					<div id="zobraz" class="vyber"></div>
+				<div style="text-align: center">
+					<div id="timeline" class="selection"></div>
+					<div id="info_census"></div>
+					<div id="view_mod" class="selection"></div>
 				</div>
 			</div>
-			<div class="tab-popis" style="min-height:275px">
+			<div class="tab-popis" style="margin: 5px 0px">
 				<h2 id="loc_box2_head"></h2>
-				<p id="osoba"><span id="loc_box2_select"></span></p>
+				<div id="loc_box2_cont"></div>
 			</div>
-			<div id="foot" class="tab-popis">
+			<div class="tab-popis" style="flex-grow:1">
 				<h2 id="loc_box3_head"></h2>
-				<div id="zdroje"></div>
-				<p><span id="link_hiu_db"></span><br />baranek [a] hiu.cas.cz</p>
+				<div id="loc_box3_cont"><span id="loc_box3_select"></span></div>
+			</div>
+
+		</div>
+		<div style="flex-grow:1; padding:5px">
+			<div id="map">
+				<div id="wait" style="display: flex;justify-content: center; align-items: center; height: 500px">
+					<img src="vendor/images/loading.gif" width="40px" />
+				</div>
 			</div>
 		</div>
-		<div id="map">
-			<div id="wait" style="display: flex;justify-content: center; align-items: center; height: 500px"><img
-					src="vendor/images/loading.gif" width="40px" /></div>
-		</div>
 	</div>
+
 	<div class="head_foot">
-		<div style="width: 100px"></div>
-		<div></div>
-		<div style="width: 300px">
-			<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" alt="License: CC BY-SA 4.0"
-				title="License: CC BY-SA 4.0"><img src="vendor/logos/cc-by-sa.svg" class="logo" /></a>
-			<a href="https://github.com/daelba/kehillot" alt="GitHub repository" title="GitHub repository"><img
-					src="vendor/logos/github-mark-white.svg" class="logo" /></a>
-			<a href="https://www.wikidata.org" title="Powered by Wikidata"><img src="vendor/logos/powered-wikidata.svg"
-					class="logo" /></a>
-			<a href="https://www.openhistoricalmap.org" alt="OpenHistoricalMap" title=OpenHistoricalMap"><img
-					src="vendor/logos/ohm.svg" class="logo" /></a>
+		<div class="head_foot_block" style="width: 300px; padding-left: 20px; justify-content:left">
+			<a id="link_hiu_inst" target="_blank">
+				<div style="display:flex; text-align:left">
+					<img src="vendor/logos/hiu.svg" class="logo" />
+					<span id="link_hiu_inst" style="padding-left:5px"></span>
+				</div>
+			</a>
+		</div>
+		<div class="head_foot_block" style="justify-content:center">
+			<p>
+				<a id="link_hiu_db" target="_blank"><span id="link_hiu_db"></span></a><br />
+				<span>
+					<a href="mailto:baranek@hiu.cas.cz" title="e-mail">
+						<img src="vendor/images/email.svg" class="icon" />
+					</a>
+					<a href="https://scholia.toolforge.org/author/Q61685639" title="Wikidata/Scholia" target="_blank">
+						<img src="vendor/logos/wikidata.svg" class="icon" />
+					</a>
+					<a id="link_mastodon" target="_blank">
+						<img src="vendor/logos/mastodon.svg" class="icon" />
+					</a>
+				</span>
+			</p>
+		</div>
+		<div class="head_foot_block" style="width: 300px; padding-right:20px; justify-content:right">
+			<a id="link_cc" target="_blank">
+				<div style="display:flex; text-align:right">
+					<img src="vendor/logos/cc-by-sa.svg" class="logo" />
+				</div>
+			</a>
+			<a href="https://github.com/daelba/kehillot" target="_blank" alt="GitHub repository"
+				title="GitHub repository">
+				<div style="display:flex; text-align:left">
+					<img src="vendor/logos/github-mark-white.svg" class="logo" />
+					<span style="padding-left:5px"><span id="verze"></span><br />1.0.0</span>
+				</div>
+			</a>
 		</div>
 	</div>
+	<div id="debug">Debug: </div>
+	<!--
 	<script>
 		var urlParams = new URLSearchParams(location.search);
 		var loc = urlParams.get('loc')
-		var locURL = "lokal/" + loc + ".js";
+		var locURL = "locs/" + loc + ".js";
 
 		$.getScript(locURL, function () {
 			$("#wait").remove();
-			$.getScript("funkce.js")
+			$.getScript("locmap.js")
 		});
 	</script>
-
+-->
 </body>
 
 </html>

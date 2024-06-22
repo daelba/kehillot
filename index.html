@@ -13,65 +13,63 @@
 
 <body>
 	<div class="head_foot">
-		<div style="width: 100px"></div>
-		<div>
+		<div class="head_foot_block" style="width: 100px; padding-left: 20px; justify-content:left">
+		</div>
+		<div class="head_foot_block" style="justify-content:center">
 			<h1 id="index_header"></h1>
 		</div>
-		<div style="width: 100px">
+		<div class="head_foot_block" style="width: 100px; padding-right:20px; justify-content:right">
 			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
 			<img class="flag" src="vendor/flags/en.svg" alt="en" />
 			<img class="flag" src="vendor/flags/de.svg" alt="de" />
 		</div>
 	</div>
-	<div class="table-wrap" style="font-size: 120%">
-		<div style="width:20%">
-			<div class="tab-popis" style="margin:0px">
+	<div class="content-wrap" style="flex-direction: column; font-size: 130%">
+		<div style="padding:5px">
+			<div class="tab-popis">
 				<h1 id="about_h1"></h1>
 				<p id="about_txt"></p>
 			</div>
-			<div class="tab-popis">
+			<div class="tab-popis" style="margin:5px 0px 0px">
 				<h1 id="locs_h1"></h1>
-				<p id="locs"style="text-align:center"></p>
+				<p id="locs" style="text-align:center"></p>
 			</div>
 		</div>
 	</div>
 	<div class="head_foot">
-		<div style="width: 300px">
+		<div class="head_foot_block" style="width: 300px; padding-left: 20px; justify-content:left">
 			<a id="link_hiu_inst" target="_blank">
-				<div style="display:flex; text-align:left; justify-content:left; padding-left:20px">
+				<div style="display:flex; text-align:left">
 					<img src="vendor/logos/hiu.svg" class="logo" />
 					<span id="link_hiu_inst" style="padding-left:5px"></span>
 				</div>
 			</a>
 		</div>
-		<div>
-			<div>
-				<p>
-					<a id="link_hiu_db" target="_blank"><span id="link_hiu_db"></span></a><br />
-					<span>
-						<a href="mailto:baranek@hiu.cas.cz" title="e-mail">
-							<img src="vendor/images/email.svg" class="icon" />
-						</a>
-						<a href="https://scholia.toolforge.org/author/Q61685639" title="Wikidata/Scholia"
-							target="_blank">
-							<img src="vendor/logos/wikidata.svg" class="icon" />
-						</a>
-						<a id="link_mastodon" target="_blank">
-							<img src="vendor/logos/mastodon.svg" class="icon" />
-						</a>
-					</span>
-				</p>
-			</div>
+		<div class="head_foot_block" style="justify-content:center">
+			<p>
+				<a id="link_hiu_db" target="_blank"><span id="link_hiu_db"></span></a><br />
+				<span>
+					<a href="mailto:baranek@hiu.cas.cz" title="e-mail">
+						<img src="vendor/images/email.svg" class="icon" />
+					</a>
+					<a href="https://scholia.toolforge.org/author/Q61685639" title="Wikidata/Scholia" target="_blank">
+						<img src="vendor/logos/wikidata.svg" class="icon" />
+					</a>
+					<a id="link_mastodon" target="_blank">
+						<img src="vendor/logos/mastodon.svg" class="icon" />
+					</a>
+				</span>
+			</p>
 		</div>
-		<div style="width: 300px">
+		<div class="head_foot_block" style="width: 300px; padding-right:20px; justify-content:right">
 			<a id="link_cc" target="_blank">
-				<div style="display:flex; justify-content:right; padding-right:20px"><img
-						src="vendor/logos/cc-by-sa.svg" class="logo" />
-					<div>
+				<div style="display:flex; text-align:right">
+					<img src="vendor/logos/cc-by-sa.svg" class="logo" />
+				</div>
 			</a>
 			<a href="https://github.com/daelba/kehillot" target="_blank" alt="GitHub repository"
 				title="GitHub repository">
-				<div style="display:flex; text-align:left; padding-right:20px">
+				<div style="display:flex; text-align:left">
 					<img src="vendor/logos/github-mark-white.svg" class="logo" />
 					<span style="padding-left:5px"><span id="verze"></span><br />1.0.0</span>
 				</div>

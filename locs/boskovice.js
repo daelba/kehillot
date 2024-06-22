@@ -48,7 +48,8 @@ var operaty = [
 		dohlR: "0"
 	},
 ];
-var zdroje = "<p><b>Osobní data:</b> Státní okresní archiv Boskovice, f. Archiv města Boskovice, sčítací operáty z let 1857 (inv. č. 1817–1820), 1869 (inv. č. 1821–1822), 1890 (inv. č. 1823–1825), 1910 (inv. č. 1826–1828) a 1921 (inv. č. 1829–1833); f. Okresní úřad Boskovice, sčítací operáty z roku 1869 (inv. č. 620).</p><p><b>Mapové podklady:</b> Moravská zemská knihovna, Situations-Plan der Stadt Boskowitz, 1870–1900; Moravský zemský archiv, f. Stabilní katastr – skici [D 9], sign. 461.</p>";
+var loc_sources_pers = "Státní okresní archiv Boskovice, f. Archiv města Boskovice, sčítací operáty z let 1857 (inv. č. 1817–1820), 1869 (inv. č. 1821–1822), 1890 (inv. č. 1823–1825), 1910 (inv. č. 1826–1828) a 1921 (inv. č. 1829–1833); f. Okresní úřad Boskovice, sčítací operáty z roku 1869 (inv. č. 620).";
+var loc_sources_map = "Moravská zemská knihovna, Situations-Plan der Stadt Boskowitz, 1870–1900; Moravský zemský archiv, f. Stabilní katastr – skici [D 9], sign. 461."
 var maxPocet = 63;
 var obyv = [
 	{
