@@ -19,32 +19,6 @@
         "en": "Processed Localities",
         "de": "Verarbeitete Orte"
     },
-    "locs_txt": [
-        {
-            "link": "Boskovice",
-            "txt": "Boskovice (Boskowitz)"
-        },
-        {
-            "link": "Hranice",
-            "txt": "Hranice (Mähr. Weisskirchen)"
-        },
-        {
-            "link": "Kolín",
-            "txt": "Kolín"
-        },
-        {
-            "link": "Loštice",
-            "txt": "Loštice (Loschitz)"
-        },
-        {
-            "link": "Příbor",
-            "txt": "Příbor (Freiberg)"
-        },
-        {
-            "link": "Žatec",
-            "txt": "Žatec (Saaz)"
-        }
-    ],
     "verze": {
         "cs": "Verze",
         "en": "Version",
@@ -64,6 +38,11 @@
         "cs": "dohledáno ve sčítacích operátech",
         "en": "found in census records",
         "de": "gefunden in den Volkszählungsoperaten"
+    },
+    "link_download": {
+        "cs": "Stáhnout dataset",
+        "en": "Download the dataset",
+        "de": "Datensatz herunterladen"
     },
     "view_map": {
         "cs": "Mapa",
@@ -110,6 +89,51 @@
         "en": "Select an object and person on the map.",
         "de": "Wählen Sie im Kartenbereich Objekt und Person aus."
     },
+    "residence": {
+        "cs": "Bydliště",
+        "en": "Residence",
+        "de": "Aufenthalt"
+    },
+    "further_info": {
+        "cs": "Další informace",
+        "en": "More information",
+        "de": "Weitere Informationen"
+    },
+    "refs": {
+        "cs": "Externí odkazy",
+        "en": "External references",
+        "de": "Externe Links"
+    },
+    "cuni": {
+        "cs": "absolvent pražské univerzity",
+        "en": "graduate of the Prague University",
+        "de": "Absolvent der Prager Universität"
+    },
+    "legie": {
+        "cs": "legionář",
+        "en": "Legionnaire",
+        "de": "Legionär"
+    },
+    "ww1": {
+        "cs": "padl v 1. světové válce",
+        "en": "died in World War I",
+        "de": "Gefallen im Ersten Weltkrieg"
+    },
+    "ww2": {
+        "cs": "příslušník československé exilové armády (2. světová válka)",
+        "en": "member of the Czechoslovak Exile Army (World War II)",
+        "de": "Mitglied der tschechoslowakischen Exilarmee (Zweiter Weltkrieg)"
+    },
+    "holocaust": {
+        "cs": "oběť holokaustu",
+        "en": "Holocaust victim",
+        "de": "Holocaust-Opfer"
+    },
+    "deport": {
+        "cs": "deportace",
+        "en": "Deportation",
+        "de": "deportation"
+    },
     "loc_view_pers_head": {
         "cs": "Osoby židovského vyznání bydlící v lokalitě roku",
         "en": "Persons of Jewish religion living in the locality in",
@@ -124,5 +148,20 @@
         "cs": "Vyhledat číslo popisné",
         "en": "Search house number",
         "de": "Hausnummer suchen"
+    },
+    "cp": {
+        "cs": "čp.",
+        "en": "No.",
+        "de": "Nr."
+    },
+    "unlocalized": {
+        "cs": "nelokalizováno",
+        "en": "unlocalized",
+        "de": "nicht lokalisiert"
+    },
+    "pop_Jewish_inhab": {
+        "cs": "obyvatelé židovského vyznání",
+        "en": "inhabitants of the Jewish religion",
+        "de": "Bewohner der jüdischen Religion"
     }
 }

@@ -21,60 +21,64 @@
 </head>
 
 <body>
-	<div class="head_foot">
-		<div class="head_foot_block" style="width: 100px; padding-left: 20px; justify-content:left">
-			<p style="text-align:center"><a id="link_index">⬅<br /><span id="link_index"></span></a></p>
+	<header class="head_foot">
+		<div class="head_foot_block left" style="width: 100px">
+			<p><a id="link_index">⬅<br /><span trans="link_index"></span></a></p>
 		</div>
-		<div class="head_foot_block" style="justify-content:center">
+		<div class="head_foot_block center">
 			<h1 id="loc_name"></h1>
 		</div>
-		<div class="head_foot_block" style="width: 100px; padding-right:20px; justify-content:right">
+		<div class="head_foot_block right" style="width: 100px">
 			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
 			<img class="flag" src="vendor/flags/en.svg" alt="en" />
 			<img class="flag" src="vendor/flags/de.svg" alt="de" />
 		</div>
-	</div>
+	</header>
 	<div class="content-wrap" style="flex-grow:1;flex-direction:row">
 		<div style="width:300px; padding:5px 0px 5px 5px; display:flex; flex-shrink:0; flex-direction:column">
-			<div class="tab-popis">
-				<h2 id="loc_box1_head"></h2>
+			<div class="tab-popis" style="margin: 0px">
+				<h2 trans="loc_box1_head"></h2>
 				<div style="text-align: center">
 					<div id="timeline" class="selection"></div>
 					<div id="info_census"></div>
 					<div id="view_mod" class="selection"></div>
 				</div>
 			</div>
-			<div class="tab-popis" style="margin: 5px 0px">
-				<h2 id="loc_box2_head"></h2>
+			<div class="tab-popis">
+				<h2 trans="loc_box2_head"></h2>
 				<div id="loc_box2_cont"></div>
 			</div>
 			<div class="tab-popis" style="flex-grow:1">
-				<h2 id="loc_box3_head"></h2>
-				<div id="loc_box3_cont"><span id="loc_box3_select"></span></div>
+				<h2 trans="loc_box3_head"></h2>
+				<div id="loc_box3_cont"><span trans="loc_box3_select"></span></div>
+			</div>
+			<div class="tab-popis" style="margin-top: 5px">
+				<div id="download"></div>
 			</div>
 
 		</div>
 		<div style="flex-grow:1; padding:5px">
 			<div id="map">
-				<div id="wait" style="display: flex;justify-content: center; align-items: center; height: 500px">
+				<div id="wait"
+					style="display: flex;justify-content: center; vertical-align: middle; align-items: center">
 					<img src="vendor/images/loading.gif" width="40px" />
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="head_foot">
-		<div class="head_foot_block" style="width: 300px; padding-left: 20px; justify-content:left">
+	<footer class="head_foot">
+		<div class="head_foot_block left" style="width: 300px">
 			<a id="link_hiu_inst" target="_blank">
 				<div style="display:flex; text-align:left">
 					<img src="vendor/logos/hiu.svg" class="logo" />
-					<span id="link_hiu_inst" style="padding-left:5px"></span>
+					<span trans="link_hiu_inst" style="padding-left:5px"></span>
 				</div>
 			</a>
 		</div>
-		<div class="head_foot_block" style="justify-content:center">
+		<div class="head_foot_block center">
 			<p>
-				<a id="link_hiu_db" target="_blank"><span id="link_hiu_db"></span></a><br />
+				<a id="link_hiu_db" target="_blank"><span trans="link_hiu_db"></span></a><br />
 				<span>
 					<a href="mailto:baranek@hiu.cas.cz" title="e-mail">
 						<img src="vendor/images/email.svg" class="icon" />
@@ -82,13 +86,13 @@
 					<a href="https://scholia.toolforge.org/author/Q61685639" title="Wikidata/Scholia" target="_blank">
 						<img src="vendor/logos/wikidata.svg" class="icon" />
 					</a>
-					<a id="link_mastodon" target="_blank">
+					<a id="link_mastodon" title="Mastodon" target="_blank">
 						<img src="vendor/logos/mastodon.svg" class="icon" />
 					</a>
 				</span>
 			</p>
 		</div>
-		<div class="head_foot_block" style="width: 300px; padding-right:20px; justify-content:right">
+		<div class="head_foot_block right" style="width: 300px">
 			<a id="link_cc" target="_blank">
 				<div style="display:flex; text-align:right">
 					<img src="vendor/logos/cc-by-sa.svg" class="logo" />
@@ -98,24 +102,11 @@
 				title="GitHub repository">
 				<div style="display:flex; text-align:left">
 					<img src="vendor/logos/github-mark-white.svg" class="logo" />
-					<span style="padding-left:5px"><span id="verze"></span><br />1.0.0</span>
+					<span style="padding-left:5px"><span trans="verze"></span><br />1.0.0</span>
 				</div>
 			</a>
 		</div>
-	</div>
-	<div id="debug">Debug: </div>
-	<!--
-	<script>
-		var urlParams = new URLSearchParams(location.search);
-		var loc = urlParams.get('loc')
-		var locURL = "locs/" + loc + ".js";
-
-		$.getScript(locURL, function () {
-			$("#wait").remove();
-			$.getScript("locmap.js")
-		});
-	</script>
--->
+	</footer>
 </body>
 
 </html>

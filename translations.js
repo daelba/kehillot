@@ -21,7 +21,7 @@ function fetchText(path) {
 function translation(lang) {
     fetchText('trans_texts.json').then((langData) => {
         $.each(langData, function (key, value) {
-            $("#" + key).each(function () {
+            $("[trans=" + key + "]").each(function () {
                 $(this).html(value[lang])
             });
         });
@@ -32,9 +32,8 @@ function links(lang) {
     fetchText('trans_links.json').then((langData) => {
         $.each(langData, function (key, value) {
             $("a#" + key).attr("href", value[lang]["href"]).attr("alt", value[lang]["text"].replace(/<[^>]+>/g, " ")).attr("title", value[lang]["text"].replace(/<[^>]+>/g, " "));
-            $("span#" + key).html(value[lang]["text"]);
+            $("span[trans=" + key + "]").html(value[lang]["text"]);
         });
-
     }).catch((error) => console.log(`Error while translating: ${error}`));
 }
 
@@ -49,15 +48,9 @@ function locs(lang) {
 }
 
 function urllang(lang) {
-    var urlParams = new URLSearchParams(location.search);
-    if (urlParams.get('lang')) {
-        var newUrl = location.search.replace(/([\?&])lang=([^&#]*)/, '$1lang=' + lang);
-    } else if (Array.from(urlParams.entries()).length > 0) {
-        var newUrl = location.search + '&lang=' + lang;
-    } else {
-        var newUrl = location.search + '?lang=' + lang;
-    }
-    history.pushState({}, '', newUrl);
+	const url = new URL(location.href);
+	url.searchParams.set('lang', lang);
+	history.pushState({}, '', url);
 }
 
 // INIT
