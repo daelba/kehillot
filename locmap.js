@@ -187,7 +187,7 @@ function view(cpObec, cpCast, cpCp) {
 	$('.aktiv').removeClass('aktiv').addClass('pasiv');
 	$('#timeline' + view_year).removeClass('pasiv').addClass('aktiv');
 	$('#view_' + view_mod).removeClass('pasiv').addClass('aktiv');
-	//map.removeLayer(area);
+	$("#map").replaceWith("<div id='view_list' class='tab-popis'></div>");
 	if (view_mod == "map") {
 		geoQuery(view_year, cpObec, cpCast, cpCp);
 	} else if (view_mod == "pers") {
@@ -195,7 +195,7 @@ function view(cpObec, cpCast, cpCp) {
 	} else if (view_mod == "search_pers") {
 		search_pers();
 	} else if (view_mod == "search_house") {
-		hledatCp();
+		search_house();
 	};
 };
 
@@ -214,118 +214,100 @@ function makeSPARQLQuery(endpointUrl, sparqlQuery, doneCallback) {
 
 async function wd(q, arch) {
 
-	// vyhledání údajů o bydlišti a různých variant jmen
+	// Search data about residence and name variants
 	var osBydl = [];
 	var osJmena = [];
 
 	data_loc["obyv"].forEach(house => {
 		house["obyv"].forEach(person => {
 			if (person["arch"] == arch) {
-				var vyhlBydl = {
+				osBydl.push({
 					"jm": person["jm"],
 					"rok": house["rok"],
 					"obec": house["obec"],
 					"cast": house["cast"],
 					"cp": house["cp"]
-				};
-				osBydl.push(vyhlBydl);
+				});
 			};
 		});
 	});
 
-	// zpracování údajů
+	// Process data
 	osBydl.sort(function (a, b) { return (a.rok - b.rok) });
 	var bydliste = "";
-	for (b = 0; b < osBydl.length; b++) {
-		bydliste += "<li>" + (osBydl[b].rok + ": " + linkCp(osBydl[b].rok, osBydl[b].obec, osBydl[b].cast, osBydl[b].cp)) + "</li>";
-		var duplJm = 0;
-		for (j = 0; j < osJmena.length; j++) {
-			if (osJmena[j].match(osBydl[b].jm) || osBydl[b].jm.match(osJmena[j])) { duplJm = duplJm + 1 };
-		};
-		if (duplJm == 0) { osJmena.push(osBydl[b].jm) };
-	};
+	osBydl.forEach(bydl => {
+		bydliste += `<li>${bydl.rok}: ${linkCp(bydl.rok, bydl.obec, bydl.cast, bydl.cp)}</li>`;
+		// Process names from census data
+		if (!osJmena.some(jmeno => jmeno.match(bydl.jm) || bydl.jm.match(jmeno))) {
+			osJmena.push(bydl.jm);
+		}
+	});
 
-	// přidání jména z arch
-	var duplJm = 0;
-	var archJm = arch.replace(/ \(.*/, "");
-	for (j = 0; j < osJmena.length; j++) {
-
-		if (osJmena[j].match(archJm) || archJm.match(osJmena[j])) { duplJm = duplJm + 1 };
-	};
-	if (duplJm == 0) { osJmena.push(archJm) };
+	// Add name from "Arch"
+	const archJm = arch.replace(/ \(.*/, "");
+	if (!osJmena.some(jmeno => jmeno.match(archJm) || archJm.match(jmeno))) {
+		osJmena.push(archJm);
+	}
 
 	// WIKIDATA
 	var wikidata1 = "";
 	var wikidata2 = "";
-	if (q != "") {
-		var runQuery2 = "";
-		// základní informace o osobě
-		var sparqlQuery = "SELECT ?item ?itemLabel ?narkdy ?narkdeLabel ?zemkdy ?zemkdeLabel ?uk ?leg ?ww1 ?cea ?hol WHERE {\n" +
-			"  SERVICE wikibase:label { bd:serviceParam wikibase:language \"cs,en\". }\n" +
-			"  VALUES ?item { wd:" + q + " }\n" +
-			"  OPTIONAL {?item wdt:P569 ?narkdy}\n" +
-			"  OPTIONAL {?item wdt:P19 ?narkde}\n" +
-			"  OPTIONAL {?item p:P570/psv:P570 [wikibase:timePrecision 11; wikibase:timeValue ?zemkdy]}\n" +
-			"  OPTIONAL {?item wdt:P20 ?zemkde}\n" +
-			"  OPTIONAL {?item wdt:P8953 ?uk}\n" +
-			"  OPTIONAL {?item wdt:P9695 ?leg}\n" +
-			// TODO			"  OPTIONAL {?item wdt:P9109 ?ww1}\n" +
-			"  OPTIONAL {?item wdt:P11465 ?cea}\n" +
-			"  OPTIONAL {?item wdt:P9109 ?hol}\n" +
-			"}";
+	if (q) {
+		// Basic personal information
+		var sparqlQuery = `SELECT ?item ?itemLabel ?narkdy ?narkdeLabel ?zemkdy ?zemkdeLabel ?uk ?leg ?ww1 ?cea ?hol WHERE {
+			  SERVICE wikibase:label { bd:serviceParam wikibase:language "cs,en". }
+              VALUES ?item { wd:${q} }
+			  OPTIONAL {?item wdt:P569 ?narkdy}
+			  OPTIONAL {?item wdt:P19 ?narkde}
+			  OPTIONAL {?item p:P570/psv:P570 [wikibase:timePrecision 11; wikibase:timeValue ?zemkdy]}
+			  OPTIONAL {?item wdt:P20 ?zemkde}
+			  OPTIONAL {?item wdt:P8953 ?uk}
+			  OPTIONAL {?item wdt:P9695 ?leg}
+			  OPTIONAL {?item wdt:P11465 ?cea}
+			  OPTIONAL {?item wdt:P9109 ?hol}
+			}`;
+		// TODO			"  OPTIONAL {?item wdt:P9109 ?ww1}\n" +
 
-		var runQuery1 = makeSPARQLQuery(endpointUrl, sparqlQuery, async function (qData) {
-			var qDataEd = qData.results.bindings;
-			if (typeof qDataEd[0].narkdy !== "undefined") { var narkdy = qDataEd[0].narkdy.value.replace(/-0/g, "-").replace(/([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}).*/, "$3. $2. $1") } else { var narkdy = "?" };
-			if (typeof qDataEd[0].zemkdy !== "undefined") { var zemkdy = qDataEd[0].zemkdy.value.replace(/-0/g, "-").replace(/([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}).*/, "$3. $2. $1") } else { var zemkdy = "?" };
-			if (typeof qDataEd[0].narkdeLabel !== "undefined") { var narkde = qDataEd[0].narkdeLabel.value } else { var narkde = "?" };
-			if (typeof qDataEd[0].zemkdeLabel !== "undefined") { var zemkde = qDataEd[0].zemkdeLabel.value } else { var zemkde = "?" };
-			var udalosti = [];
-			var ids = [];
-			if (typeof qDataEd[0].uk !== "undefined") {
-				udalosti.push("<li><a href='http://is.cuni.cz/webapps/archiv/public/person/se/" + qDataEd[0].uk.value + "' target='_blank' rel='noopener'>absolvent pražské univerzity</a></li>")
-			};
-			if (typeof qDataEd[0].leg !== "undefined") { udalosti.push("<li><a href='http://legie100.com/krev-legionare/" + qDataEd[0].leg.value + "' target='_blank' rel='noopener'>legionář</a></li>") };
-			if (typeof qDataEd[0].ww1 !== "undefined") { udalosti.push("<li><a href='https://www.vuapraha.cz/padli-1-svetova/" + qDataEd[0].ww1.value + "' target='_blank' rel='noopener'>padl v 1. světové válce</a></li>") };
-			if (typeof qDataEd[0].cea !== "undefined") { udalosti.push("<li><a href='https://www.vuapraha.cz/cechoslovaci-v-zahranici/" + qDataEd[0].cea.value + "/' target='_blank' rel='noopener'>příslušník československé exilové armády (2. světová válka)</a></li>") };
-			if (typeof qDataEd[0].hol !== "undefined") { udalosti.push("<li><a href='https://www.holocaust.cz/cs/databaze-obeti/obet/" + qDataEd[0].hol.value + "/' target='_blank' rel='noopener'>oběť holokaustu</a></li>") };
+		var qData = await makeSPARQLQuery(endpointUrl, sparqlQuery);
+		var qDataEd = qData.results.bindings[0] || {};
+		const formatDate = dateStr => dateStr ? dateStr.replace(/-0/g, "-").replace(/([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}).*/, "$3. $2. $1") : "?";
+		const narkdy = formatDate(qDataEd.narkdy?.value);
+		const zemkdy = formatDate(qDataEd.zemkdy?.value);
+		const narkde = qDataEd.narkdeLabel?.value || "?";
+		const zemkde = qDataEd.zemkdeLabel?.value || "?";
+		const udalosti = [];
+		if (qDataEd.uk) udalosti.push(`<li><a href='http://is.cuni.cz/webapps/archiv/public/person/se/${qDataEd.uk.value}' target='_blank' rel='noopener'>absolvent pražské univerzity</a></li>`);
+		if (qDataEd.leg) udalosti.push(`<li><a href='http://legie100.com/krev-legionare/${qDataEd.leg.value}' target='_blank' rel='noopener'>legionář</a></li>`);
+		if (qDataEd.ww1) udalosti.push(`<li><a href='https://www.vuapraha.cz/padli-1-svetova/${qDataEd.ww1.value}' target='_blank' rel='noopener'>padl v 1. světové válce</a></li>`);
+		if (qDataEd.cea) udalosti.push(`<li><a href='https://www.vuapraha.cz/cechoslovaci-v-zahranici/${qDataEd.cea.value}/' target='_blank' rel='noopener'>příslušník československé exilové armády (2. světová válka)</a></li>`);
+		if (qDataEd.hol) udalosti.push(`<li><a href='https://www.holocaust.cz/cs/databaze-obeti/obet/${qDataEd.hol.value}/' target='_blank' rel='noopener'>oběť holokaustu</a></li>`);
 
-			// informace o transportu
-			var trans = "";
+		// Information abou transport
+		const sparqlTrans = `SELECT ?item ?transOd ?transStartLabel ?transCilLabel WHERE {
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "cs,en". }
+            VALUES ?item { wd:${q} }
+            ?item wdt:P793 ?trans.
+            ?trans wdt:P580 ?transOd;
+                   wdt:P1427 ?transStart;
+                   wdt:P1444 ?transCil.
+        } ORDER BY ?transOd`;
 
-			var sparqlTrans = "SELECT ?item ?transOd ?transStartLabel ?transCilLabel WHERE {\n" +
-				"  SERVICE wikibase:label { bd:serviceParam wikibase:language \"cs,en\". }\n" +
-				"  VALUES ?item { wd:" + q + " }\n" +
-				"  ?item wdt:P793 ?trans.\n" +
-				"  ?trans wdt:P580 ?transOd;\n" +
-				"         wdt:P1427 ?transStart;\n" +
-				"         wdt:P1444 ?transCil.\n" +
-				"} ORDER BY ?transOd";
-
-			var runQuery2 = makeSPARQLQuery(endpointUrl, sparqlTrans, async function (tData) {
-				var tDataEd = tData.results.bindings;
-				if (typeof tDataEd.length !== 0) {
-					var tCount = tDataEd.length;
-					for (let i = 0; i < tCount; i++) {
-						var transOd = tDataEd[i].transOd.value.replace(/-0/g, "-").replace(/([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}).*/, "$3. $2. $1");
-						var transStart = tDataEd[i].transStartLabel.value;
-						var transCil = tDataEd[i].transCilLabel.value;
-						udalosti.push("<li>" + transOd + " deportace: " + transStart + " → " + transCil + "</li>")
-					}
-				};
-				ids.push("<li><a href='https://www.wikidata.org/wiki/" + q + "' target='_blank' rel='noopener'>Wikidata</a></li>");
-
-				// zobrazení informací
-				wikidata1 = ("<p><b>" + narkdy + ", " + narkde + " – " + zemkdy + ", " + zemkde + "</b></p>").replace("?, ?", "?");
-				wikidata2 = "<h4>Další informace:</h4><ul>" + udalosti.join("") + "</ul><h4>Odkazy:</h4><ul>" + ids.join("") + "</ul>";
-			});
-			var waitQuery2 = await runQuery2;
+		const tData = await makeSPARQLQuery(endpointUrl, sparqlTrans);
+		const tDataEd = tData.results.bindings;
+		tDataEd.forEach(trans => {
+			const transOd = formatDate(trans.transOd.value);
+			const transStart = trans.transStartLabel.value;
+			const transCil = trans.transCilLabel.value;
+			udalosti.push(`<li>${transOd} deportace: ${transStart} → ${transCil}</li>`);
 		});
-		var waitQuery1 = await runQuery1;
+		const ids = [`<li><a href='https://www.wikidata.org/wiki/${q}' target='_blank' rel='noopener'>Wikidata</a></li>`];
+		// zobrazení informací
+		wikidata1 = `<p><b>${narkdy}, ${narkde} – ${zemkdy}, ${zemkde}</b></p>`.replace("?, ?", "?");
+		wikidata2 = `<h4>Další informace:</h4><ul>${udalosti.join("")}</ul><h4>Odkazy:</h4><ul>${ids.join("")}</ul>`;
 	};
 
 	$("#loc_box3_cont").empty();
-	$("#loc_box3_cont").append("<h3>" + osJmena.join(" / ") + " " + arch.replace(/.* \(/, "\(").replace(/–xxx[0-9]/, "").replace(/\(([0-9]+)\)/, "\(*$1\)") + "</h3>" + wikidata1 + "<h4>Bydliště:</h4><ul>" + bydliste + "</ul>" + wikidata2);
+	$("#loc_box3_cont").append(`<h3>${osJmena.join(" / ")} ${arch.replace(/.* \(/, "(").replace(/–xxx[0-9]/, "").replace(/\(([0-9]+)\)/, "(*$1)")}</h3>${wikidata1}<h4>Bydliště:</h4><ul>${bydliste}</ul>${wikidata2}`);
 };
 
 
@@ -430,30 +412,26 @@ function geoQuery(rok, cpObec, cpCast, cpCp) {
 
 // MOD PERSONS
 function view_pers() {
-	$("#map").replaceWith("<div id='view_list' class='tab-popis'></div>");
 	$('#view_list').empty()
-	var filter_houses = $.grep(data_loc["obyv"], function (array) { return (array["rok"] === view_year) })
-		.sort(function (a, b) {
-			if (a.obec < b.obec) return -1;
-			if (a.obec > b.obec) return 1;
-			if (a.cast < b.cast) return -1;
-			if (a.cast > b.cast) return 1;
-			if (("0000" + a.cp.replace(/–.*/, "")).slice(-4) < ("0000" + b.cp.replace(/–.*/, "")).slice(-4)) return -1;
-			if (("0000" + a.cp.replace(/–.*/, "")).slice(-4) > ("0000" + b.cp.replace(/–.*/, "")).slice(-4)) return 1;
-			return 0;
+	var filter_houses = data_loc["obyv"].filter(house => house["rok"] === view_year)
+		.sort((a, b) => {
+			if (a.obec !== b.obec) return a.obec.localeCompare(b.obec);
+			if (a.cast !== b.cast) return a.cast.localeCompare(b.cast);
+			const aCp = a.cp.replace(/–.*/, "").padStart(4, '0');
+			const bCp = b.cp.replace(/–.*/, "").padStart(4, '0');
+			return aCp.localeCompare(bCp);
 		});
 	if (filter_houses.length == 0) {
-		$("#view_list").append('<h2 id="without_data" style="text-align:center">' + data_trans_texts["without_data"][lang] + '</h2>');
+		$("#view_list").append(`<h2 id="without_data" style="text-align:center">${data_trans_texts["without_data"][lang]}</h2>`);
 	} else {
-		$("#view_list").append("<h2><span id='loc_view_pers_head'>" + data_trans_texts["loc_view_pers_head"][lang] + "</span> " + view_year + "</h2><p align='center'></p><div id='list'></div>");
+		$("#view_list").append(`<h2><span id='loc_view_pers_head'>${data_trans_texts['loc_view_pers_head'][lang]}</span> ${view_year} </h2><p align='center'></p><div id='list'></div>`);
 		$("#list").append(filter_houses);
 		filter_houses.forEach(house => {
-			var vypis = [];
-			house["obyv"].forEach(person => {
-				vypis.push('<span class="link" onclick="show_person(this,\'' + person["q"] + '\', \'' + person["arch"] + '\')">' + person["jm"] + '</span>')
-			});
-			$("#list").append("<p><b>" + linkCp(view_year, house["obec"], house["cast"], house["cp"]) + ":</b> " + vypis.join(", ") + "</p>");
-		})
+			const personsSpan = house["obyv"]
+				.map(person => `<span class="link" onclick="show_person(this,'${person["q"]}', '${person["arch"]}')">${person["jm"]}</span>`)
+				.join(", ");
+			$("#list").append(`<p><b>${linkCp(view_year, house["obec"], house["cast"], house["cp"])}:</b> ${personsSpan}</p>`);
+		});
 	}
 };
 
@@ -462,49 +440,44 @@ function search_pers() {
 	$("#timeline .aktiv").removeClass('aktiv').addClass('pasiv');
 	$("#view_list")
 		.empty()
-		.append("<div><b>Vyhledat osoby: </b><input type='text' id='input_search' placeholder='.*' /></div><div id='list'></div>");
+		.append("<div><b><span id='view_search_pers'>" + data_trans_texts["view_search_pers"][lang] + "</span>: </b><input type='text' id='input_search' placeholder='.*' autofocus /></div><div id='list'></div>");
 	$("#input_search").on("input", function () {
-		var inputValue = $(this).val();
+		var inputValue = $(this).val().toLowerCase();
 		if (inputValue.length >= 1) {
 			$("#list").empty();
 			var foundPers = [];
-			var foundPersID = [];
-			// find the name in census
-			for (var o = 0; o < data_loc["obyv"].length; o++) {
-				for (os = 0; os < data_loc["obyv"][o]["obyv"].length; os++) {
-					if (data_loc["obyv"][o]["obyv"][os].jm.toLowerCase().match(inputValue.toLowerCase())) {
-						var foundPersData = {
-							"arch": data_loc["obyv"][o]["obyv"][os]["arch"],
-							"jm": data_loc["obyv"][o]["obyv"][os]["jm"],
-							"q": data_loc["obyv"][o]["obyv"][os]["q"],
-							"rok": data_loc["obyv"][o]["rok"]
-						};
-						foundPers.push(foundPersData);
-						foundPersID.push(data_loc["obyv"][o]["obyv"][os]["arch"]);
-					};
-				};
-			};
-			// find the name in Wikidata labels
-			for (var q = 0; q < data_loc["Qlabels"].length; q++) {
-				if (data_loc["Qlabels"][q].jm.toLowerCase().match(inputValue.toLowerCase())) {
-					var foundPersData = {
-						"arch": data_loc["Qlabels"][q]["arch"],
-						"jm": data_loc["Qlabels"][q]["jm"],
-						"q": data_loc["Qlabels"][q]["q"],
-						"rok": "1940"
-					};
-					foundPers.push(foundPersData);
-					foundPersID.push(data_loc["Qlabels"][q]["arch"]);
-				};
-			};
+			var foundPersID = new Set();
 
-			foundPers.sort(function (a, b) { return a.rok - b.rok });
-			var listPers = $.unique(foundPersID.sort());
+			const processPersFound = (person, year) => {
+				if (person.jm.toLowerCase().match(inputValue)) {
+					foundPers.push({
+						"arch": person["arch"],
+						"jm": person["jm"],
+						"q": person["q"],
+						"rok": year
+					});
+					foundPersID.add(person["arch"]);
+				}
+			}
+
+			// find the name in census
+			data_loc["obyv"].forEach(house => {
+				house["obyv"].forEach(person => {
+					processPersFound(person, house["rok"])
+				});
+			});
+			// find the name in Wikidata labels
+			data_loc["Qlabels"].forEach(label => {
+				processPersFound(label, "1940")
+			});
+
+			foundPers.sort((a, b) => a.rok - b.rok);
+			var listPers = Array.from(foundPersID).sort();
 
 			listPers.forEach(personID => {
-				var rec_full = $.grep(foundPers, function (array) { return (array["arch"] === personID) });
+				var rec_full = $.grep(foundPers, p => p["arch"] === personID);
 				var rec_name = personID.replace(/–xxx[0-9]/, "").replace(/\(([0-9]+)\)/, "(*$1)");
-				var rec_show = '<span class="link" onclick="show_person(this, \'' + rec_full[0].q + '\', \'' + rec_full[0].arch + '\')">' + rec_name + '</span>';
+				var rec_show = `<span class="link" onclick="show_person(this, '${rec_full.q}', '${rec_full.arch}')">${rec_name}</span>`;
 				$("#list").append(rec_show + '<br/>');
 			});
 		};
@@ -518,69 +491,78 @@ function show_person(element, q, arch) {
 };
 
 // MOD SEARCH HOUSES
-function hledatCp() {
-	$("#osoby").append("<div><b>Vyhledat číslo popisné: </b><input type='text' id='input-hledat' placeholder='.*' /></div><div id='cp-tab'></div>");
-	document.getElementById("input-hledat").addEventListener("input", i => {
-		var vyhlVal = document.getElementById("input-hledat").value;
-		var len = vyhlVal.length;
-		if (len >= 1) {
-			$("#cp-tab").empty();
-			var vyhlCp = [];
-			for (var c = 0; c < data_loc["geoJSON"].features.length; c++) {
-				var cpProp = data_loc["geoJSON"].features[c]["properties"];
-				if (typeof cpProp["addr:housenumber"] !== "undefined" && cpProp["addr:housenumber"].match(vyhlVal) && cpProp["start_date"] < 1931) {
-					var vyhlObj = {
-						"start": cpProp["start_date"],
-						"end": cpProp["end_date"],
-						"obec": cpProp["addr:city"],
-						"cast": cpProp["addr:place"],
-						"cp": cpProp["addr:housenumber"]
-					};
-					vyhlCp.push(vyhlObj);
-				};
-			};
-			vyhlCp.sort(function (a, b) { return a.cp - b.cp || a.start - b.start });
+function search_house() {
+	$("#timeline .aktiv").removeClass('aktiv').addClass('pasiv');
+	$("#view_list")
+		.empty()
+		.append(`<div><b><span id='input_house_number'>${data_trans_texts["input_house_number"][lang]}</span>: </b><input type='text' id='input_search' placeholder='.*' autofocus /></div><div id='list'></div>`);
+	$("#input_search").on("input", function () {
+		var inputValue = $(this).val();
+		if (inputValue.length >= 1) {
+			$("#list").empty();
+			const vyhlCp = data_loc["geoJSON"].features
+				.filter(feature => {
+					const cpProp = feature.properties;
+					return cpProp["addr:housenumber"] !== undefined &&
+						cpProp["addr:housenumber"].match(inputValue) &&
+						cpProp["start_date"] < 1931;
+				})
+				.map(feature => ({
+					"start": feature["properties"]["start_date"],
+					"end": feature["properties"]["end_date"],
+					"obec": feature["properties"]["addr:city"],
+					"cast": feature["properties"]["addr:place"],
+					"cp": feature["properties"]["addr:housenumber"]
+				}))
+				.sort((a, b) => { return a.cp - b.cp || a.start - b.start });
 
-			// jednotlivá čp
-			for (x = 0; x < vyhlCp.length; x++) {
-				if (vyhlCp[x].start <= 1869) { var cpRok = "1869" }
-				else if (vyhlCp[x].start <= 1880) { var cpRok = "1880" }
-				else if (vyhlCp[x].start <= 1890) { var cpRok = "1890" }
-				else if (vyhlCp[x].start <= 1900) { var cpRok = "1900" }
-				else if (vyhlCp[x].start <= 1910) { var cpRok = "1910" }
-				else if (vyhlCp[x].start <= 1921) { var cpRok = "1921" }
-				else if (vyhlCp[x].start <= 1930) { var cpRok = "1930" }
-				else { var cpRok = vyhlCp[x].start };
-				var cpDoba = (' (' + vyhlCp[x].start + '–' + vyhlCp[x].end + ')').replace(/\(([0-9]{4})–undefined\)/, "(od $1)");
-				if (typeof vyhlCp[x].cast !== "undefined") { var cast = vyhlCp[x].cast } else { vyhlCp[x].cast = "" };
-				$("#cp-tab").append(linkCp(cpRok, vyhlCp[x].obec, vyhlCp[x].cast, vyhlCp[x].cp) + cpDoba + '<br/>');
-			}
+			// individual house number
+			vyhlCp.forEach(cp => {
+				const cpRok = cp.start <= 1869 ? "1869" :
+					cp.start <= 1880 ? "1880" :
+						cp.start <= 1890 ? "1890" :
+							cp.start <= 1900 ? "1900" :
+								cp.start <= 1910 ? "1910" :
+									cp.start <= 1921 ? "1921" :
+										cp.start <= 1930 ? "1930" : cp.start;
+				const cpDoba = ` (${cp.start}–${cp.end})`.replace(/\(([0-9]{4})–undefined\)/, "(od $1)");
+				var cast = cp.cast || "";
+				$("#list").append(linkCp(cpRok, cp.obec, cast, cp.cp) + cpDoba + '<br/>');
+			});
 		};
 	});
 };
 
 // PROLINKOVÁNÍ ČP
 function linkCp(rok, obec, cast, cp) {
-	var testLocCp = $.grep(data_loc["geoJSON"].features, function (array) { return (array.properties["addr:city"] == obec && array.properties["addr:housenumber"] == cp && (array.properties["start_date"] <= rok || typeof array.properties["start_date"] === "undefined") && (array.properties["end_date"] > rok || typeof array.properties["end_date"] === "undefined")) });
+	var testLocCp = data_loc["geoJSON"].features.filter(feature => {
+		const props = feature.properties;
+		return props["addr:city"] === obec &&
+			props["addr:housenumber"] === cp &&
+			(props["start_date"] <= rok || typeof props["start_date"] === "undefined") &&
+			(props["end_date"] > rok || typeof props["end_date"] === "undefined");
+	});
 
-	if (cast != "") { var testLocCp = $.grep(testLocCp, function (array) { return (array.properties["addr:place"] == cast) }); };
-	if (testLocCp.length > 0) {
-		var linkCp = (obec + ', ' + cast + ', ').replace(/, ,/, ",") + '<span class="link" onclick="cp(\'' + rok + '\',\'' + obec + '\',\'' + cast + '\',\'' + cp + '\')">čp. ' + cp + '</span>';
-	} else {
-		var linkCp = (obec + ', ' + cast + ', čp. ' + cp + ' <i>(nelokalizováno)</i>').replace(/^, /, "");
-	}
-	return linkCp
+	if (cast != "") {
+		var testLocCp = testLocCp.filter(feature => feature.properties["addr:place"] === cast);
+	};
+
+	const linkCp = testLocCp.length > 0
+		? `${obec}, ${cast}, `.replace(/, ,/, ",") + `<span class="link" onclick="cp('${rok}','${obec}','${cast}','${cp}')">čp. ${cp}</span>`
+		: `${obec}, ${cast}, čp. ${cp} <i>(nelokalizováno)</i>`.replace(/^, /, "");
+
+	return linkCp;
 };
 
 // ZOBRAZENÍ VYBRANÉHO ČP
 function cp(cpRok, cpObec, cpCast, cpCp) {
-	if (zobraz_mod != "mapa") {
-		$("#osoby").replaceWith("<div id='map'></div>");
-		map = L.map('map').setView(mapCenter, 16);
+	if (view_mod != "map") {
+		$("#view_list").replaceWith("<div id='map'></div>");
+		map = L.map('map').setView(data_loc["mapCenter"], 16);
 		initMap();
-		zobraz_mod = "mapa";
+		view_mod = "map";
 	} else { map.removeLayer(area) };
 	view_year = cpRok;
-	zobraz(cpObec, cpCast, cpCp);
+	view(cpObec, cpCast, cpCp);
 };
 

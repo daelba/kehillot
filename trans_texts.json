@@ -119,5 +119,10 @@
         "cs": "Sčítací operáty z vybraného roku se nedochovaly.",
         "en": "Census records from the selected year have not been preserved.",
         "de": "Die Volkszählungsoperaten aus dem ausgewählten Jahr sind nicht erhalten geblieben."
+    },
+    "input_house_number": {
+        "cs": "Vyhledat číslo popisné",
+        "en": "Search house number",
+        "de": "Hausnummer suchen"
     }
 }

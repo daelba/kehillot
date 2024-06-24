@@ -21,9 +21,10 @@ function fetchText(path) {
 function translation(lang) {
     fetchText('trans_texts.json').then((langData) => {
         $.each(langData, function (key, value) {
-            $("#" + key).html(value[lang]);
+            $("#" + key).each(function () {
+                $(this).html(value[lang])
+            });
         });
-
     }).catch((error) => console.log(`Error while translating: ${error}`));
 }
 
