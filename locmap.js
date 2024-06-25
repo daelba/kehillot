@@ -40,14 +40,6 @@ function urllang(lang) {
 	history.pushState({}, '', url);
 }
 
-// LOCALITY FUNCTIONS
-
-function loclang(data_loc, lang) {
-	$("#loc_name").html(data_loc["loc_name"][lang]);
-	view();
-
-}
-
 /* ------------- INIT ------------- */
 
 // Set global variables
@@ -74,11 +66,7 @@ $(document).ready(async function () {
 
 	loc = urlParams.get('loc');
 
-	// Fetch data
-	var waitFetchData = await fetchText(`locs/${loc}.json`).then((data) => {
-		data_loc = data
-	});
-
+	// Fetch translation data
 	var waitFetchData = await fetchText('trans_texts.json').then((data) => {
 		data_trans_texts = data
 	});
@@ -98,7 +86,8 @@ $(document).ready(async function () {
 		// TODO zkontrolovat, zda je daný rok v dané lokalitě zpracovaný
 		$("#timeline" + year).on("click", function () {
 			view_year = year;
-			view();
+			if (view_mod == "map") { map.removeLayer(area) };
+			if (view_mod == "map" || view_mod == "pers") { view(); };
 		});
 	});
 
@@ -108,27 +97,23 @@ $(document).ready(async function () {
 
 	// View mode
 	var views = ["map", "pers", "search_pers", "search_house"];
-	views.forEach(function (v) {
+	views.forEach(v => {
 		$("#view_mod").append('<span class="pasiv" id="view_' + v + '" trans="view_' + v + '"></span>');
 		$("#view_" + v).on("click", function () {
 			view_mod = v;
+			if (v == "map") { init_map() }
 			view();
 		});
 	});
 
 	// INFOBOX 2 (Sources)
 	var sources = ["pers", "map"];
-	sources.forEach(function (s) {
+	sources.forEach(s => {
 		$("#loc_box2_cont").append(`<p><b>${transSpan("loc_box2_" + s)}: </b><span id="loc_sources_${s}"></span></p>`);
 	});
 
 	// INFOBOX 4 (Download)
-	$("#download").append(`<a href="locs/${loc}.json" download="${loc}.json">${transSpan("link_download")}</a> (<a id="link_cc" target="_blank"><span trans="link_cc"></span></a>)`)
-
-	// Info unrelated to lang
-	$('#loc_sources_pers').append(data_loc["loc_sources_pers"]);
-	$('#loc_sources_map').append(data_loc["loc_sources_map"]);
-
+	$("#download").append(`<b><a href="locs/${loc}.json" download="${loc}.json">${transSpan("link_download")}</a></b> (<a id="link_cc" target="_blank"><span trans="link_cc"></span></a>)`)
 
 	// Construct switch language
 	$(document).on("click", ".flag", function () {
@@ -139,14 +124,26 @@ $(document).ready(async function () {
 		loclang(data_loc, lang);
 	});
 
+	// Load translations
+	translation(lang);
+	links(lang);
+	urllang(lang);
+
+	// Fetch database and map data
+	var waitFetchData = await fetchText(`locs/${loc}.json`).then((data) => {
+		data_loc = data
+	});
+	$("#loc_name").html(data_loc["loc_name"][lang]);
+
+	// Info unrelated to lang
+	$('#loc_sources_pers').append(data_loc["loc_sources_pers"]);
+	$('#loc_sources_map').append(data_loc["loc_sources_map"]);
+
 	// Remove wait icon
 	$("#wait").remove();
 
 	// Info related to lang
-	loclang(data_loc, lang);
-	translation(lang);
-	links(lang);
-	urllang(lang);
+	init_map();
 });
 
 
@@ -166,7 +163,12 @@ function view(cpObec, cpCast, cpCp) {
 	$("#loc_box1_official_found").text(`${ofic['dohlA']} (${dohlR} %)`);
 
 	// Activate view_mod
-	$("#map").replaceWith("<div id='view_list' class='tab-popis'></div>");
+	if (view_mod != "map") {
+		$("#map").replaceWith("<div id='view_list' class='tab-popis'></div>")
+	} else {
+		$("#view_list").replaceWith('<div id="map"></div>');
+	};
+
 	switch (view_mod) {
 		case "map":
 			view_map(view_year, cpObec, cpCast, cpCp);
@@ -295,12 +297,13 @@ async function wd(q, arch) {
 };
 
 
+
+
 // MOD MAPA
 
-function view_map(rok, cpObec, cpCast, cpCp) {
+// Initialize Leaflet map	
+function init_map() {
 	$("#view_list").replaceWith('<div id="map"></div>');
-
-	// Initialize Leaflet map	
 	map = L.map('map').setView(data_loc["mapCenter"], 16);
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 		{
@@ -309,6 +312,11 @@ function view_map(rok, cpObec, cpCast, cpCp) {
 			minZoom: 3,
 			opacity: 0.15
 		}).addTo(map);
+	view();
+}
+// Show map
+
+function view_map(rok, cpObec, cpCast, cpCp) {
 
 	const filtrGeoJSON = data_loc["geoJSON"].features.filter(array =>
 		(array.properties["start_date"] <= rok || typeof array.properties["start_date"] === "undefined") &&
@@ -332,7 +340,7 @@ function view_map(rok, cpObec, cpCast, cpCp) {
 				fillOpacity: 0.8,
 				weight: 0.5
 			};
-			if (typeof feature.properties["waterway"] !== "undefined") {
+			if (typeof feature.properties["waterway"] !== "undefined" || typeof feature.properties["water"] !== "undefined" ) {
 				style.color = "lightblue";
 				style.fillColor = "lightblue";
 				style.fillOpacity = 1;
@@ -391,7 +399,9 @@ function view_map(rok, cpObec, cpCast, cpCp) {
 				}
 			}
 		}
-	}).addTo(map);
+	});
+	map.addLayer(area);
+
 	if (typeof cpCp !== "undefined") { map.setView(focus, 17) };
 };
 
@@ -469,7 +479,6 @@ function search_pers() {
 	});
 };
 
-
 function show_person(element, q, arch) {
 	$(".bold").removeClass("bold");
 	$(element).addClass("bold");
@@ -519,7 +528,7 @@ function search_house() {
 	});
 };
 
-// PROLINKOVÁNÍ ČP
+// LINK TO HOUSE
 function linkCp(rok, obec, cast, cp) {
 	var testLocCp = data_loc["geoJSON"].features.filter(feature => {
 		const props = feature.properties;
@@ -539,13 +548,14 @@ function linkCp(rok, obec, cast, cp) {
 	return linkCp;
 };
 
-// ZOBRAZENÍ VYBRANÉHO ČP
+// VIEW HOUSE
 function cp(cpRok, cpObec, cpCast, cpCp) {
+	view_year = cpRok;
 	if (view_mod != "map") {
 		$("#view_list").replaceWith("<div id='map'></div>");
 		view_mod = "map";
+		init_map();
 	} else { map.removeLayer(area) };
-	view_year = cpRok;
 	view(cpObec, cpCast, cpCp);
 };
 
