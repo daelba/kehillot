@@ -25,13 +25,14 @@ function translation(lang) {
 
 function links(lang) {
 	$.each(data_trans_links, function (key, value) {
-		$("a#" + key).attr("href", value[lang]["href"]).attr("alt", value[lang]["text"].replace(/<[^>]+>/g, " ")).attr("title", value[lang]["text"].replace(/<[^>]+>/g, " "));
-		$("span[trans=" + key + "]").html(value[lang]["text"]);
+		$(`a#${key}`).attr("href", value[lang]["href"]).attr("title", value[lang]["text"].replace(/<[^>]+>/g, " "));
+		$(`span[trans=${key}]`).html(value[lang]["text"]);
 	});
 }
 
 function transSpan(key) {
-	return `<span trans='${key}'>${data_trans_texts[key][lang]}</span>`
+	const text = data_trans_texts[key]?.[lang] ?? data_trans_texts[key]?.["cs"] ?? key;
+	return `<span trans='${key}'>${text}</span>`;
 }
 
 function urllang(lang) {
@@ -43,44 +44,41 @@ function urllang(lang) {
 /* ------------- INIT ------------- */
 
 // Set global variables
-var view_mod = "map";
-var view_year = "1890";
-var lang;
-var loc;
-var data_loc;
-var data_trans_texts;
-var data_trans_links;
-var map;
-var area;
+let view_mod = "map";
+let view_year = "1890";
+let lang;
+let loc;
+let data_loc;
+let data_trans_texts;
+let data_trans_links;
+let map;
+let area;
 
 $(document).ready(async function () {
 
 	// Init variables
-	var urlParams = new URLSearchParams(location.search);
+	const urlParams = new URLSearchParams(location.search);
 
-	if (urlParams.get('lang')) {
-		lang = urlParams.get('lang')
-	} else {
-		lang = "cs"
-	};
-
+	lang = urlParams.get('lang') || "cs";
 	loc = urlParams.get('loc');
 
-	// Fetch translation data
-	var waitFetchData = await fetchText('trans_texts.json').then((data) => {
-		data_trans_texts = data
-	});
+	if (!loc) {
+		document.body.innerHTML = '<p style="padding:2em;text-align:center">No locality specified. <a href="index.html">Return to index.</a></p>';
+		return;
+	}
 
-	var waitFetchData = await fetchText('trans_links.json').then((data) => {
-		data_trans_links = data
-	});
+	// Fetch translation data in parallel
+	[data_trans_texts, data_trans_links] = await Promise.all([
+		fetchText('trans_texts.json'),
+		fetchText('trans_links.json')
+	]);
 
 	// CONSTRUCT INFOBOX ELEMENTS
 
 	// INFOBOX 1 (Census information)
 
 	// Timeline
-	var years = ["1857", "1869", "1880", "1890", "1900", "1910", "1921", "1930"];
+	const years = ["1857", "1869", "1880", "1890", "1900", "1910", "1921", "1930"];
 	years.forEach(function (year) {
 		$("#timeline").append('<span class="pasiv" id="timeline' + year + '">' + year + '</span>');
 		// TODO zkontrolovat, zda je daný rok v dané lokalitě zpracovaný
@@ -96,7 +94,7 @@ $(document).ready(async function () {
 	$("#info_census").append('<p><span trans="loc_box1_found"></span>: <span id="loc_box1_official_found"></span></p>');
 
 	// View mode
-	var views = ["map", "pers", "search_pers", "search_house"];
+	const views = ["map", "pers", "search_pers", "search_house"];
 	views.forEach(v => {
 		$("#view_mod").append('<span class="pasiv" id="view_' + v + '" trans="view_' + v + '"></span>');
 		$("#view_" + v).on("click", function () {
@@ -107,7 +105,7 @@ $(document).ready(async function () {
 	});
 
 	// INFOBOX 2 (Sources)
-	var sources = ["pers", "map"];
+	const sources = ["pers", "map"];
 	sources.forEach(s => {
 		$("#loc_box2_cont").append(`<p><b>${transSpan("loc_box2_" + s)}: </b><span id="loc_sources_${s}"></span></p>`);
 	});
@@ -124,15 +122,21 @@ $(document).ready(async function () {
 		loclang(data_loc, lang);
 	});
 
+	// Handle keyboard activation of flag buttons
+	$(document).on("keydown", ".flag", function (e) {
+		if (e.key === "Enter" || e.key === " ") {
+			e.preventDefault();
+			$(this).trigger("click");
+		}
+	});
+
 	// Load translations
 	translation(lang);
 	links(lang);
 	urllang(lang);
 
 	// Fetch database and map data
-	var waitFetchData = await fetchText(`locs/${loc}.json`).then((data) => {
-		data_loc = data
-	});
+	data_loc = await fetchText(`locs/${loc}.json`);
 	$("#loc_name").html(data_loc["loc_name"][lang]);
 
 	// Info unrelated to lang
@@ -157,10 +161,13 @@ function view(cpObec, cpCast, cpCp) {
 	$(`#view_${view_mod}`).removeClass('pasiv').addClass('aktiv');
 
 	// Values in infobox 1
-	var [ofic] = data_loc["operaty"].filter(oper => oper.rok === view_year);
-	const dohlR = lang !== "en" ? ofic['dohlR'].replace(".", ",") : ofic['dohlR'];
+	const [ofic] = data_loc["operaty"].filter(oper => oper.rok === view_year);
+	const dohlR = ofic['dohlR'] != null
+		? (lang !== "en" ? ofic['dohlR'].toLocaleString("cs") : String(ofic['dohlR']))
+		: "–";
+	const dohlA = ofic['dohlA'] != null ? ofic['dohlA'] : "–";
 	$("#loc_box1_official_value").text(ofic['ofic']);
-	$("#loc_box1_official_found").text(`${ofic['dohlA']} (${dohlR} %)`);
+	$("#loc_box1_official_found").text(ofic['dohlA'] != null ? `${dohlA} (${dohlR} %)` : "–");
 
 	// Activate view_mod
 	if (view_mod != "map") {
@@ -470,7 +477,7 @@ function search_pers() {
 			var listPers = Array.from(foundPersID).sort();
 
 			listPers.forEach(personID => {
-				var rec_full = $.grep(foundPers, p => p["arch"] === personID);
+				const rec_full = foundPers.filter(p => p["arch"] === personID);
 				var rec_name = personID.replace(/–xxx[0-9]/, "").replace(/\(([0-9]+)\)/, "(*$1)");
 				var rec_show = `<span class="link" onclick="show_person(this, '${rec_full[0].q}', '${rec_full[0].arch}')">${rec_name}</span>`;
 				$("#list").append(rec_show + '<br/>');
@@ -511,15 +518,10 @@ function search_house() {
 				}))
 				.sort((a, b) => { return a.cp - b.cp || a.start - b.start });
 
+			const censusYears = [1869, 1880, 1890, 1900, 1910, 1921, 1930];
 			// individual house number
 			vyhlCp.forEach(cp => {
-				const cpRok = cp.start <= 1869 ? "1869" :
-					cp.start <= 1880 ? "1880" :
-						cp.start <= 1890 ? "1890" :
-							cp.start <= 1900 ? "1900" :
-								cp.start <= 1910 ? "1910" :
-									cp.start <= 1921 ? "1921" :
-										cp.start <= 1930 ? "1930" : cp.start;
+				const cpRok = String(censusYears.find(y => cp.start <= y) ?? cp.start);
 				const cpDoba = ` (${cp.start}–${cp.end})`.replace(/\(([0-9]{4})–undefined\)/, "(od $1)");
 				var cast = cp.cast || "";
 				$("#list").append(linkCp(cpRok, cp.obec, cast, cp.cp) + cpDoba + '<br/>');

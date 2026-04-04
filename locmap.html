@@ -3,10 +3,14 @@
 
 <head>
 	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Maps of Jewish settlement in the Bohemian lands, 1857–1930" />
 	<title>Kehillot | קהילות</title>
 
 	<!-- vendor -->
-	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+		crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
 		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
 		crossorigin="" />
@@ -17,26 +21,26 @@
 
 	<!-- local -->
 	<link href="styles.css" rel="stylesheet" type="text/css" />
-	<script src="locmap.js"></script>
+	<script src="locmap.js" defer></script>
 </head>
 
 <body>
 	<header class="head_foot">
-		<div class="head_foot_block left" style="width: 100px">
+		<div class="head_foot_block left head_foot_side">
 			<p><a id="link_index">⬅<br /><span trans="link_index"></span></a></p>
 		</div>
 		<div class="head_foot_block center">
 			<h1 id="loc_name"></h1>
 		</div>
-		<div class="head_foot_block right" style="width: 100px">
-			<img class="flag" src="vendor/flags/cs.svg" alt="cs" />
-			<img class="flag" src="vendor/flags/en.svg" alt="en" />
-			<img class="flag" src="vendor/flags/de.svg" alt="de" />
+		<div class="head_foot_block right head_foot_side">
+			<img class="flag" src="vendor/flags/cs.svg" alt="cs" role="button" tabindex="0" />
+			<img class="flag" src="vendor/flags/en.svg" alt="en" role="button" tabindex="0" />
+			<img class="flag" src="vendor/flags/de.svg" alt="de" role="button" tabindex="0" />
 		</div>
 	</header>
-	<div class="content-wrap" style="flex-grow:1;flex-direction:row">
-		<div style="width:300px; padding:5px 0px 5px 5px; display:flex; flex-shrink:0; flex-direction:column">
-			<div class="tab-popis" style="margin: 0px">
+	<div class="content-wrap content-wrap-map">
+		<div class="locmap-sidebar">
+			<div class="tab-popis tab-popis-first">
 				<h2 trans="loc_box1_head"></h2>
 				<div style="text-align: center">
 					<div id="timeline" class="selection"></div>
@@ -48,20 +52,19 @@
 				<h2 trans="loc_box2_head"></h2>
 				<div id="loc_box2_cont"></div>
 			</div>
-			<div class="tab-popis" style="flex-grow:1">
+			<div class="tab-popis tab-popis-grow">
 				<h2 trans="loc_box3_head"></h2>
 				<div id="loc_box3_cont"><span trans="loc_box3_select"></span></div>
 			</div>
-			<div class="tab-popis" style="margin-top: 5px">
+			<div class="tab-popis tab-popis-download">
 				<h2>Dataset</h2>
 				<div id="download"></div>
 			</div>
 
 		</div>
-		<div style="flex-grow:1; padding:5px;">
-			<div id="map" style="display: flex; justify-content: center; align-items: center;">
-				<div id="wait"
-					style="display: flex;justify-content: center; vertical-align: middle; align-items: center">
+		<div class="locmap-main">
+			<div id="map" class="map-loading-wrap">
+				<div id="wait" class="map-loading-spinner">
 					<img src="vendor/images/loading.gif" width="40px" />
 				</div>
 			</div>
@@ -69,11 +72,11 @@
 	</div>
 
 	<footer class="head_foot">
-		<div class="head_foot_block left" style="width: 300px">
+		<div class="head_foot_block left head_foot_footer">
 			<a id="link_hiu_inst" target="_blank">
-				<div style="display:flex; text-align:left">
+				<div class="footer-logo-block">
 					<img src="vendor/logos/hiu.svg" class="logo" />
-					<span trans="link_hiu_inst" style="padding-left:5px"></span>
+					<span trans="link_hiu_inst" class="logo-label"></span>
 				</div>
 			</a>
 		</div>
@@ -93,17 +96,17 @@
 				</span>
 			</p>
 		</div>
-		<div class="head_foot_block right" style="width: 300px">
+		<div class="head_foot_block right head_foot_footer">
 			<a id="link_cc" target="_blank">
-				<div style="display:flex; text-align:right">
+				<div class="footer-logo-block footer-logo-right">
 					<img src="vendor/logos/cc-by-sa.svg" class="logo" />
 				</div>
 			</a>
-			<a href="https://github.com/daelba/kehillot" target="_blank" alt="GitHub repository"
+			<a href="https://github.com/daelba/kehillot" target="_blank"
 				title="GitHub repository">
-				<div style="display:flex; text-align:left">
+				<div class="footer-logo-block">
 					<img src="vendor/logos/github-mark-white.svg" class="logo" />
-					<span style="padding-left:5px"><span trans="verze"></span><br />1.0.0</span>
+					<span class="logo-label"><span trans="verze"></span><br />1.0.1</span>
 				</div>
 			</a>
 		</div>
